@@ -27,7 +27,14 @@ class Parser: SyntaxVisitor {
     // MARK: Practice 2
 
     private func extractNumberLiteral(from token: TokenSyntax) -> Double? {
-        fatalError("Not Implemented")
+        switch token.tokenKind {
+        case let .integerLiteral(integer):
+            return Double(integer)
+        case let .floatingLiteral(float):
+            return Double(float)
+        default:
+            fatalError("any number is expected")
+        }
     }
 
     func parseNumber() -> Node {
@@ -39,7 +46,13 @@ class Parser: SyntaxVisitor {
     }
 
     func parseIdentifierExpression() -> Node {
-        fatalError("Not Implemented")
+        switch currentToken.tokenKind {
+        case let .identifier(variable):
+            read()
+            return VariableNode(identifier: variable)
+        default:
+            fatalError("any variable is expected")
+        }
     }
 
     // MARK: Practice 3

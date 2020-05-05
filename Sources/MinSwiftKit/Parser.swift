@@ -10,15 +10,18 @@ class Parser: SyntaxVisitor {
 
     override func visit(_ token: TokenSyntax) {
         print("Parsing \(token.tokenKind)")
+        tokens.append(token)
     }
 
     @discardableResult
     func read() -> TokenSyntax {
-        fatalError("Not Implemented")
+        currentToken = tokens[index]
+        index += 1
+        return currentToken
     }
 
     func peek(_ n: Int = 0) -> TokenSyntax {
-        fatalError("Not Implemented")
+        return tokens[index + n]
     }
 
     // MARK: Practice 2

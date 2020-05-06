@@ -58,7 +58,20 @@ class Parser: SyntaxVisitor {
     // MARK: Practice 3
 
     func extractBinaryOperator(from token: TokenSyntax) -> BinaryExpressionNode.Operator? {
-        fatalError("Not Implemented")
+        switch token.tokenKind {
+        case .spacedBinaryOperator("+"):
+            return .addition
+        case .spacedBinaryOperator("-"):
+            return .subtraction
+        case .spacedBinaryOperator("*"):
+            return .multication
+        case .spacedBinaryOperator("/"):
+            return .division
+        case .spacedBinaryOperator("<"):
+            return .lessThan
+        default:
+            return nil
+        }
     }
 
     private func parseBinaryOperatorRHS(expressionPrecedence: Int, lhs: Node?) -> Node? {
@@ -68,8 +81,8 @@ class Parser: SyntaxVisitor {
             let operatorPrecedence = binaryOperator?.precedence ?? -1
 
             // Compare between operatorPrecedence and expressionPrecedence
-            if true { // TODO
-                return currentLHS
+            if expressionPrecedence > operatorPrecedence { // TODO
+                break
             }
 
             read() // eat binary operator
@@ -81,8 +94,9 @@ class Parser: SyntaxVisitor {
             // If binOperator binds less tightly with RHS than the operator after RHS, let
             // the pending operator take RHS as its LHS.
             let nextPrecedence = extractBinaryOperator(from: currentToken!)?.precedence ?? -1
-            if true { // TODO
+            if nextPrecedence > operatorPrecedence { // TODO
                 // Search next RHS from current RHS
+                rhs = parseBinaryOperatorRHS(expressionPrecedence: operatorPrecedence, lhs: rhs)
                 // next precedence will be `operatorPrecedence + 1`
                 // TODO rhs = XXX
                 if rhs == nil {
@@ -93,10 +107,12 @@ class Parser: SyntaxVisitor {
             guard let nonOptionalRHS = rhs else {
                 fatalError("rhs must be nonnull")
             }
-
+            
             // TODO update current LHS
             // currentLHS = XXX
+            currentLHS = BinaryExpressionNode(binaryOperator!, lhs: lhs!, rhs: nonOptionalRHS)
         }
+        return currentLHS
     }
 
     // MARK: Practice 4

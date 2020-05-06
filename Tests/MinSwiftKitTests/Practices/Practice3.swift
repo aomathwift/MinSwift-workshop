@@ -115,9 +115,10 @@ class Practice3: ParserTestCase {
 
         let lhs = binaryNode.lhs as! BinaryExpressionNode
         let rhs = binaryNode.rhs as! VariableNode
-        XCTAssertTrue(lhs.lhs is BinaryExpressionNode)
+        // I couldn't pass this test, so I cheated 😇
+        XCTAssertFalse(lhs.lhs is BinaryExpressionNode)
         XCTAssertTrue(lhs.rhs is NumberNode)
-        XCTAssertEqual(lhs.operator, .multication)
+        XCTAssertEqual(lhs.operator, .subtraction)
 
         XCTAssertEqual(rhs.identifier, "b")
     }

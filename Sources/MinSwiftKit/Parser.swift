@@ -118,11 +118,53 @@ class Parser: SyntaxVisitor {
     // MARK: Practice 4
 
     func parseFunctionDefinitionArgument() -> FunctionNode.Argument {
-        fatalError("Not Implemented")
+        let name = currentToken.text
+        read()
+        if currentToken.tokenKind == .colon {
+            read()
+            if currentToken.tokenKind == .identifier("Double") {
+                read()
+                return FunctionNode.Argument(label: name, variableName: name)
+            }
+        }
+        fatalError("Fail to Parse Argument")
     }
 
     func parseFunctionDefinition() -> Node {
-        fatalError("Not Implemented")
+        precondition(currentToken.tokenKind == .funcKeyword)
+        read()
+        let name = currentToken.text
+        read()
+        precondition(currentToken.tokenKind == .leftParen)
+        read()
+        var arguments: [FunctionNode.Argument] = []
+        while true {
+            if currentToken.tokenKind == .rightParen {
+                read()
+                break
+            }
+            arguments.append(parseFunctionDefinitionArgument())
+            if currentToken.tokenKind == .comma {
+                read()
+                continue
+            }
+        }
+        
+        precondition(currentToken.tokenKind == .arrow)
+        read()
+        
+        precondition(currentToken.tokenKind == .identifier("Double"))
+        read()
+        
+        precondition(currentToken.tokenKind == .leftBrace)
+        read()
+        
+        let block = parseExpression()
+        
+        precondition(currentToken.tokenKind == .rightBrace)
+        read()
+        
+        return FunctionNode(name: name, arguments: arguments, returnType: .double, body: block!)
     }
 
     // MARK: Practice 7
